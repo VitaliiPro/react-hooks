@@ -41,41 +41,41 @@ const contacts = [
 ];
 
 const Contacts = () => {
-  const [contact, setContact] = useState("");
-  function getContact(event) {
+  const [search, setContact] = useState("");
+  function handleInput(event) {
     setContact(event.target.value);
   }
+
+  const filterContacts = contacts.filter((list) => {
+    return (
+      list.lastName.toLowerCase().includes(search.toLowerCase()) ||
+      list.firstName.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+
+  const mapContacts = filterContacts.map((item, index) => {
+    return (
+      <Contact
+        key={index}
+        firstName={item.firstName}
+        lastName={item.lastName}
+        phone={item.phone}
+        gender={item.gender}
+      />
+    );
+  });
 
   return (
     <div className="container">
       <input
+        value={search}
         className="input"
         name="search"
         type="search"
         placeholder="Search..."
-        onChange={getContact}
+        onChange={handleInput}
       />
-      {contacts
-        .filter((contacts) => {
-          if (contact === "") {
-            return contacts;
-          } else if (
-            contacts.lastName.toLowerCase().includes(contact.toLowerCase())
-          ) {
-            return contacts;
-          }
-        })
-        .map((item) => {
-          return (
-            <Contact
-              key={item.lastName}
-              firstName={item.firstName}
-              lastName={item.lastName}
-              phone={item.phone}
-              gender={item.gender}
-            />
-          );
-        })}
+      {mapContacts}
     </div>
   );
 };
